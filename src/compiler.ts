@@ -465,6 +465,26 @@ export const compile = (m: Module) => {
             ),
           ),
         ]),
+        ...m.funcImports
+          .map((func) =>
+            compileSExpression(
+              {
+                fn: 'import',
+                inlineArgs: [`"${func.namespace}" "${func.importName}"`],
+                blockArgs: [
+                  space(2) + `(func $${func.name}`,
+                  ...func.params.map(
+                    ([dt, name]) => space(4) + `(param ${dt})`,
+                  ),
+                  func.dataType !== 'none'
+                    ? space(4) + `(result ${func.dataType})`
+                    : null,
+                  space(2) + ")"
+                ],
+              },
+              1,
+            ),
+          ),
         ...m.tables.flatMap((table) => [
           compileSExpression(
             {
@@ -531,7 +551,9 @@ export const compile = (m: Module) => {
                 ...func.locals.map(
                   ([dt, name]) => space(2) + `(local $${name} ${dt})`,
                 ),
-                instr(func.body, 2),
+                ...func.body.map(
+                  e => instr(e, 2)
+                ),
               ],
             },
             1,
