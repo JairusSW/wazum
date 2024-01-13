@@ -472,10 +472,7 @@ export const compile = (m: Module) => {
                 fn: 'data',
                 blockArgs: [
                   instr(seg.offset, 2),
-                  space(2) +
-                  `"${[...seg.data]
-                    .map((d) => '\\' + d.toString(16))
-                    .join('')}"`,
+                  space(2) + "\"" + seg.data + "\""
                 ],
               },
               1,

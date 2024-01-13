@@ -17,7 +17,7 @@ export type Memory = {
 };
 
 export type MemorySegment = {
-  data: Uint8Array;
+  data: Uint8Array | string;
   offset: Instr<IntegerDataType>;
 };
 
